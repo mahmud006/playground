@@ -1,0 +1,35 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "Step-by-step Node.js learning project",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "argon2": "^0.41.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "jose": "^6.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.13.5",
+    "prisma": "^6.4.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
