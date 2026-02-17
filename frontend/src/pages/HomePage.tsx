@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
 
-import { useAuth } from "../state/auth/hooks";
+import { useAuth } from "../app/auth/hooks";
 
 export function HomePage() {
   const { user, logout } = useAuth();

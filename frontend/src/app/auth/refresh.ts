@@ -1,4 +1,4 @@
-import { apiJson, ApiError } from "../../lib/api";
+import { apiJson, ApiError } from "../api/http";
 
 let refreshInFlight: Promise<string | null> | null = null;
 

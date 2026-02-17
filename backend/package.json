@@ -5,7 +5,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --watch src --ext ts,tsx --exec tsx src/server.ts",
+    "dev:debug": "cross-env NODE_ENV=development nodemon --watch src --ext ts,tsx --inspect --exec tsx src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
@@ -28,6 +29,8 @@
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.3",
     "@types/node": "^22.13.5",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.9",
     "prisma": "^6.4.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"

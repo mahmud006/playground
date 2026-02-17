@@ -7,8 +7,8 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
 import "./index.css";
 import App from "./App.tsx";
-import { AuthProvider } from "./state/auth/AuthProvider";
-import { queryClient } from "./api/client";
+import { AuthProvider } from "./app/auth/AuthProvider";
+import { queryClient } from "./app/api/client";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

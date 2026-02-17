@@ -12,8 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ApiError } from "../lib/api";
-import { useAuth } from "../state/auth/hooks";
+import { ApiError } from "../app/api/http";
+import { useAuth } from "../app/auth/hooks";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;

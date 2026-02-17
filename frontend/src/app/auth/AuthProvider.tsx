@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { apiJson, ApiError } from "../../lib/api";
-import type { AuthContextValue, AuthStatus, User } from "./types";
+import { apiJson, ApiError } from "../api/http";
 import { AuthContext } from "./AuthContext";
+import type { AuthContextValue, AuthStatus, User } from "./types";
 import { refreshAccessTokenOnce } from "./refresh";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -109,6 +109,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-// Hooks and route guards are defined in hooks.tsx to keep this file as a pure provider component.
 
