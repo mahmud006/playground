@@ -10,6 +10,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const accessTokenRef = useRef<string | null>(null);
+  const didInitRefreshRef = useRef(false);
 
   const setAccessToken = useCallback((token: string | null) => {
     accessTokenRef.current = token;
@@ -62,6 +63,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    // React 18 StrictMode runs effects twice in development.
+    // Guard so we don't spam `/auth/refresh` on mount during dev.
+    if (didInitRefreshRef.current) return;
+    didInitRefreshRef.current = true;
+
     (async () => {
       const token = await refreshAccessTokenOnce(setAccessToken);
       await loadMe(token);
