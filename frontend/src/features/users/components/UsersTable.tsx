@@ -1,4 +1,5 @@
 import {
+  Box,
   Chip,
   Paper,
   Table,
@@ -8,7 +9,10 @@ import {
   TableHead,
   TableRow,
   Skeleton,
+  Typography,
 } from "@mui/material";
+
+import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 
 import type { UsersTableProps, UserListItem } from "../interfaces/users.interfaces.ts";
 
@@ -58,6 +62,29 @@ export function UsersTable({ users, isLoading }: UsersTableProps) {
                   ))}
                 </TableRow>
               ))
+            : users.length === 0
+              ? (
+                  <TableRow>
+                    <TableCell colSpan={6}>
+                      <Box
+                        sx={{
+                          py: 6,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <PersonOffOutlinedIcon sx={{ fontSize: 44, color: "text.secondary" }} />
+                        <Typography variant="subtitle1">No users found</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Create a user to see them listed here.
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
             : users.map((user) => (
                 <TableRow key={user.id} hover>
                   <TableCell>{user.name}</TableCell>

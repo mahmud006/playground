@@ -6,6 +6,7 @@ import { RequireAuth, RedirectAuthedHome } from "./guards.tsx";
 
 import { DashboardPage } from "@/features/dashboard/pages/DashboardPage.tsx";
 import { UsersPage } from "@/features/users/pages/UsersPage.tsx";
+import { AddUserPage } from "@/features/users/pages/AddUserPage.tsx";
 import { SettingsPage } from "@/features/settings/pages/SettingsPage.tsx";
 import { LoginPage } from "@/features/auth/pages/LoginPage.tsx";
 import { SignupPage } from "@/features/auth/pages/SignupPage.tsx";
@@ -20,6 +21,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <DashboardPage /> },
       { path: "users", element: <UsersPage /> },
+      { path: "users/new", element: <AddUserPage /> },
       { path: "settings", element: <SettingsPage /> },
     ],
   },

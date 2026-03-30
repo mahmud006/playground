@@ -5,6 +5,7 @@ import { API_V1_PREFIX } from "./constants/api.js";
 import { env } from "./env.js";
 import authRouter from "./routes/authRoutes.js";
 import { meRouter } from "./routes/me.js";
+import usersRouter from "./routes/users.js";
 
 const app = express();
 const PORT = env.PORT;
@@ -18,6 +19,7 @@ app.get(`${API_V1_PREFIX}/health`, (_req: Request, res: Response) => {
 
 app.use(`${API_V1_PREFIX}/auth`, authRouter);
 app.use(`${API_V1_PREFIX}/profile`, meRouter);
+app.use(`${API_V1_PREFIX}/users`, usersRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
