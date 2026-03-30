@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 
 import { apiJson, ApiError } from "../api/http";
 import { AuthContext } from "./AuthContext";
@@ -11,6 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const accessTokenRef = useRef<string | null>(null);
   const didInitRefreshRef = useRef(false);
+  const location = useLocation();
 
   const setAccessToken = useCallback((token: string | null) => {
     accessTokenRef.current = token;
@@ -68,11 +70,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (didInitRefreshRef.current) return;
     didInitRefreshRef.current = true;
 
+    // Avoid the refresh rehydration call on public auth routes.
+    // When you first land on `/login` or `/signup` there is usually no refresh cookie yet,
+    // so calling `/auth/refresh` is unnecessary noise.
+    const shouldSkipRefresh = location.pathname === "/login" || location.pathname === "/signup";
+
     (async () => {
-      const token = await refreshAccessTokenOnce(setAccessToken);
+      const token = shouldSkipRefresh ? null : await refreshAccessTokenOnce(setAccessToken);
       await loadMe(token);
     })();
-  }, [loadMe, setAccessToken]);
+  }, [location.pathname, loadMe, setAccessToken]);
 
   const signup = useCallback(
     async (email: string, password: string) => {
