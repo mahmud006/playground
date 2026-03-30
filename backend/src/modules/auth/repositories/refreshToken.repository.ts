@@ -1,7 +1,15 @@
-import { prisma } from "../db/prisma.js";
-import { createRefreshToken, hashRefreshToken, parseRefreshToken, type RefreshToken } from "./jwt.js";
+import { prisma } from "../../../db/prisma.js";
+import {
+  createRefreshToken,
+  hashRefreshToken,
+  parseRefreshToken,
+  type RefreshToken,
+} from "../utils/jwt.js";
 
-export async function persistRefreshToken(params: { userId: string; refresh: RefreshToken }): Promise<void> {
+export async function persistRefreshToken(params: {
+  userId: string;
+  refresh: RefreshToken;
+}): Promise<void> {
   await prisma.refreshToken.create({
     data: {
       userId: params.userId,
@@ -66,4 +74,3 @@ export async function revokeRefreshToken(token: string): Promise<void> {
     data: { revokedAt: now },
   });
 }
-

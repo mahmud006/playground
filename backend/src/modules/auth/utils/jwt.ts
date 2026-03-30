@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { SignJWT, jwtVerify } from "jose";
 import { z } from "zod";
 
-import { env } from "../env.js";
+import { env } from "../../../env.js";
 
 const AccessPayloadSchema = z.object({
   sub: z.string().min(1),
@@ -65,4 +65,3 @@ export function parseRefreshToken(token: string): { jti: string } | null {
   if (!jti) return null;
   return { jti };
 }
-

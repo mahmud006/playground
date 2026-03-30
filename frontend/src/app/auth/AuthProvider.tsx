@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const me = await apiJson<{ user: User }>("/me", {
+        const me = await apiJson<{ user: User }>('/profile', {
           headers: { authorization: `Bearer ${token}` },
         });
         setUser(me.user);

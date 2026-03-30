@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { verifyAccessToken } from "./jwt.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 function extractBearerToken(req: Request): string | null {
   const header = req.header("authorization");
@@ -24,4 +24,3 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     res.status(401).json({ error: "Invalid access token" });
   }
 }
-

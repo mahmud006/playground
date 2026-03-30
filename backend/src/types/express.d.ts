@@ -1,4 +1,4 @@
-import type { AccessTokenClaims } from "../auth/jwt.js";
+import type { AccessTokenClaims } from "../modules/auth/utils/jwt.ts";
 
 declare global {
   namespace Express {

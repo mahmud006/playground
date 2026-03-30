@@ -2,7 +2,7 @@ import express, { type Request, type Response } from "express";
 import cookieParser from "cookie-parser";
 
 import { env } from "./env.js";
-import { authRouter } from "./auth/routes.js";
+import authRouter from "./routes/authRoutes.js";
 import { meRouter } from "./routes/me.js";
 
 const app = express();
@@ -16,7 +16,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
-app.use("/me", meRouter);
+app.use("/profile", meRouter);
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
