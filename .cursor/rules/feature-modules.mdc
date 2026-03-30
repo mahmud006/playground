@@ -1,0 +1,42 @@
+---
+description: Feature module structure and conventions
+globs: frontend/src/features/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Feature Module Convention
+
+Every feature under `src/features/<name>/` MUST contain exactly these 5 folders:
+
+```
+features/<name>/
+  pages/          # Route-level page components (one per route)
+  components/     # Feature-scoped reusable UI components
+  services/       # TanStack Query hooks + raw API call functions
+  interfaces/     # Feature-scoped types and interfaces
+  utils/          # Feature-scoped helper functions
+```
+
+## Rules
+
+- **No `ui/` or `api/` folders.** Use `pages/` + `components/` and `services/` respectively.
+- **No barrel `index.ts`** files inside features.
+- Pages are named `<Name>Page.tsx` (e.g. `DashboardPage.tsx`). They compose components.
+- Services are named `<name>Service.ts` (e.g. `dashboardService.ts`). They export TanStack Query hooks (`useXxx`) and raw API functions.
+- Interfaces are named `<name>.interfaces.ts`. They hold request/response types, component prop types, and local state types.
+- Components stay pure -- no direct API calls. Data comes via props or hooks from `services/`.
+- A feature NEVER imports from another feature's internals. Shared code goes to `src/components/`, `src/hooks/`, or `src/types/`.
+
+## Example: Adding a "Projects" feature
+
+```
+features/projects/
+  pages/ProjectsPage.tsx
+  components/ProjectCard.tsx
+  components/ProjectFilters.tsx
+  services/projectsService.ts    # exports useProjects(), useCreateProject()
+  interfaces/projects.interfaces.ts
+  utils/formatProjectDate.ts
+```
+
+Then add the route in `app/router/routes.tsx` under the DashboardLayout children.

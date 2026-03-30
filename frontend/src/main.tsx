@@ -1,27 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
-import "./index.css";
-import App from "./App.tsx";
-import { AuthProvider } from "./app/auth/AuthProvider";
-import { queryClient } from "./app/api/client";
+import "@/index.css";
+import App from "@/App.tsx";
+import { AppProviders } from "@/app/providers/AppProviders.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider theme={createTheme({ palette: { mode: "dark" } })}>
-      <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </BrowserRouter>
-        <ReactQueryDevtools buttonPosition="bottom-left" />
-      </QueryClientProvider>
-    </ThemeProvider>
-  </StrictMode>
+    <AppProviders>
+      <App />
+    </AppProviders>
+  </StrictMode>,
 );

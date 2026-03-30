@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
-import { apiJson, ApiError } from "../api/http";
-import { AuthContext } from "./AuthContext";
-import type { AuthContextValue, AuthStatus, User } from "./types";
-import { refreshAccessTokenOnce } from "./refresh";
+import { configureAuth } from "@/lib/api/axios.ts";
+import {
+  loginUser,
+  signupUser,
+  logoutUser,
+  refreshToken,
+  fetchProfile,
+} from "@/features/auth/services/authService.ts";
+import { AuthContext } from "./AuthContext.tsx";
+import type { AuthContextValue, AuthStatus } from "./types.ts";
+import type { User } from "@/types/models.ts";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [user, setUser] = useState<User | null>(null);
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const accessTokenRef = useRef<string | null>(null);
-  const didInitRefreshRef = useRef(false);
+  const didInitRef = useRef(false);
   const location = useLocation();
 
   const setAccessToken = useCallback((token: string | null) => {
@@ -19,27 +26,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAccessTokenState(token);
   }, []);
 
-  const fetchWithAuthJson = useCallback(
-    async <T,>(path: string, init?: RequestInit): Promise<T> => {
-      const run = async (token: string | null): Promise<T> => {
-        const headers = new Headers(init?.headers ?? {});
-        if (token) headers.set("authorization", `Bearer ${token}`);
-        return apiJson<T>(path, { ...init, headers });
-      };
-
-      try {
-        return await run(accessTokenRef.current);
-      } catch (err) {
-        if (err instanceof ApiError && err.status === 401) {
-          const newToken = await refreshAccessTokenOnce(setAccessToken);
-          if (!newToken) throw err;
-          return await run(newToken);
-        }
-        throw err;
+  const refreshAccessToken = useCallback(async (): Promise<string | null> => {
+    try {
+      const result = await refreshToken();
+      if (!result?.accessToken) {
+        setAccessToken(null);
+        return null;
       }
-    },
-    [setAccessToken]
-  );
+      setAccessToken(result.accessToken);
+      return result.accessToken;
+    } catch {
+      setAccessToken(null);
+      return null;
+    }
+  }, [setAccessToken]);
+
+  useEffect(() => {
+    configureAuth(
+      () => accessTokenRef.current,
+      refreshAccessToken,
+    );
+  }, [refreshAccessToken]);
 
   const loadMe = useCallback(
     async (token: string | null) => {
@@ -48,12 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setStatus("anonymous");
         return;
       }
-
       try {
-        const me = await apiJson<{ user: User }>('/profile', {
-          headers: { authorization: `Bearer ${token}` },
-        });
-        setUser(me.user);
+        const { user: profile } = await fetchProfile(token);
+        setUser(profile);
         setStatus("authenticated");
       } catch {
         setUser(null);
@@ -61,53 +65,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setStatus("anonymous");
       }
     },
-    [setAccessToken]
+    [setAccessToken],
   );
 
   useEffect(() => {
-    // React 18 StrictMode runs effects twice in development.
-    // Guard so we don't spam `/auth/refresh` on mount during dev.
-    if (didInitRefreshRef.current) return;
-    didInitRefreshRef.current = true;
+    if (didInitRef.current) return;
+    didInitRef.current = true;
 
-    // Avoid the refresh rehydration call on public auth routes.
-    // When you first land on `/login` or `/signup` there is usually no refresh cookie yet,
-    // so calling `/auth/refresh` is unnecessary noise.
-    const shouldSkipRefresh = location.pathname === "/login" || location.pathname === "/signup";
+    const skipRefresh = location.pathname === "/login" || location.pathname === "/signup";
 
     (async () => {
-      const token = shouldSkipRefresh ? null : await refreshAccessTokenOnce(setAccessToken);
+      const token = skipRefresh ? null : await refreshAccessToken();
       await loadMe(token);
     })();
-  }, [location.pathname, loadMe, setAccessToken]);
+  }, [location.pathname, loadMe, refreshAccessToken]);
 
   const signup = useCallback(
     async (email: string, password: string) => {
-      const { accessToken: token } = await apiJson<{ accessToken: string }>("/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      setAccessToken(token);
-      await loadMe(token);
+      const { accessToken } = await signupUser({ email, password });
+      setAccessToken(accessToken);
+      await loadMe(accessToken);
     },
-    [loadMe, setAccessToken]
+    [loadMe, setAccessToken],
   );
 
   const login = useCallback(
     async (email: string, password: string) => {
-      const { accessToken: token } = await apiJson<{ accessToken: string }>("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      setAccessToken(token);
-      await loadMe(token);
+      const { accessToken } = await loginUser({ email, password });
+      setAccessToken(accessToken);
+      await loadMe(accessToken);
     },
-    [loadMe, setAccessToken]
+    [loadMe, setAccessToken],
   );
 
   const logout = useCallback(async () => {
     try {
-      await apiJson<unknown>("/auth/logout", { method: "POST" });
+      await logoutUser();
     } finally {
       setUser(null);
       setAccessToken(null);
@@ -116,10 +109,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [setAccessToken]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ status, user, accessToken: accessTokenState, signup, login, logout, fetchWithAuthJson }),
-    [status, user, accessTokenState, signup, login, logout, fetchWithAuthJson]
+    () => ({ status, user, accessToken: accessTokenState, signup, login, logout }),
+    [status, user, accessTokenState, signup, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

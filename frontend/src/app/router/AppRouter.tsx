@@ -1,9 +1,7 @@
 import { useRoutes } from "react-router-dom";
 
-import { routes } from "./routes";
+import { routes } from "./routes.tsx";
 
 export function AppRouter() {
-  const element = useRoutes(routes);
-  return element;
+  return useRoutes(routes);
 }
-
