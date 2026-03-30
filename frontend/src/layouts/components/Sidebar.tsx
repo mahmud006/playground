@@ -31,29 +31,72 @@ export function Sidebar() {
   const { open } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
+  const sidebarWidth = open ? SIDEBAR_WIDTH : 0;
+  const contentFadeDelay = open ? "120ms" : "0ms";
 
   return (
     <Drawer
-      variant="persistent"
-      open={open}
+      variant="permanent"
       sx={{
-        width: open ? SIDEBAR_WIDTH : 0,
+        width: sidebarWidth,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: SIDEBAR_WIDTH,
+          width: sidebarWidth,
           boxSizing: "border-box",
           bgcolor: "background.default",
           borderRight: 1,
           borderColor: "divider",
+          overflow: "hidden",
+          willChange: "width",
+          transition: (t) =>
+            t.transitions.create("width", {
+              easing: t.transitions.easing.sharp,
+              duration: t.transitions.duration.leavingScreen,
+            }),
         },
       }}
     >
-      <Box sx={{ p: 2.5, pb: 1.5 }}>
+      <Box
+        sx={{
+          p: open ? 2.5 : 1,
+          pb: open ? 1.5 : 0.5,
+          transition: (t) => t.transitions.create(["padding"], { duration: t.transitions.duration.leavingScreen }),
+        }}
+      >
         <Typography variant="h6" fontWeight={700} color="primary">
-          Playground
+          <Box
+            component="span"
+            sx={{
+              display: "inline-block",
+              opacity: open ? 1 : 0,
+              transition: (t) =>
+                t.transitions.create("opacity", {
+                  easing: t.transitions.easing.sharp,
+                  duration: t.transitions.duration.leavingScreen,
+                  delay: contentFadeDelay,
+                }),
+            }}
+          >
+            Playground
+          </Box>
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Enterprise Dashboard
+          <Box
+            component="span"
+            sx={{
+              display: "inline-block",
+              opacity: open ? 1 : 0,
+              transition: (t) =>
+                t.transitions.create("opacity", {
+                  easing: t.transitions.easing.sharp,
+                  duration: t.transitions.duration.leavingScreen,
+                  delay: contentFadeDelay,
+                }),
+              whiteSpace: "nowrap",
+            }}
+          >
+            Enterprise Dashboard
+          </Box>
         </Typography>
       </Box>
 
@@ -82,6 +125,18 @@ export function Sidebar() {
               <ListItemText
                 primary={item.label}
                 primaryTypographyProps={{ fontSize: "0.875rem", fontWeight: 500 }}
+                sx={{
+                  m: 0,
+                  opacity: open ? 1 : 0,
+                  whiteSpace: "nowrap",
+                  pointerEvents: open ? "auto" : "none",
+                  transition: (t) =>
+                    t.transitions.create("opacity", {
+                      easing: t.transitions.easing.sharp,
+                      duration: t.transitions.duration.leavingScreen,
+                      delay: contentFadeDelay,
+                    }),
+                }}
               />
             </ListItemButton>
           );

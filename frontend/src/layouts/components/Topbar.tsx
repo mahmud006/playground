@@ -22,6 +22,7 @@ export function Topbar() {
   const { user, logout } = useAuth();
   const { open, toggle } = useSidebar();
   const { mode, toggleMode } = useThemeMode();
+  const sidebarWidth = open ? SIDEBAR_WIDTH : 0;
 
   return (
     <AppBar
@@ -29,13 +30,13 @@ export function Topbar() {
       elevation={0}
       sx={{
         height: TOPBAR_HEIGHT,
-        width: open ? `calc(100% - ${SIDEBAR_WIDTH}px)` : "100%",
-        ml: open ? `${SIDEBAR_WIDTH}px` : 0,
+        width: `calc(100% - ${sidebarWidth}px)`,
+        ml: `${sidebarWidth}px`,
         bgcolor: "background.default",
         borderBottom: 1,
         borderColor: "divider",
         transition: (t) =>
-          t.transitions.create(["width", "margin"], {
+          t.transitions.create(["width", "margin-left"], {
             easing: t.transitions.easing.sharp,
             duration: t.transitions.duration.leavingScreen,
           }),
