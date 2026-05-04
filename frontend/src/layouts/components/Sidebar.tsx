@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/DashboardOutlined";
 import PeopleIcon from "@mui/icons-material/PeopleOutlined";
+import NoteIcon from "@mui/icons-material/DescriptionOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsOutlined";
 
 import { SIDEBAR_WIDTH } from "@/config/constants.ts";
@@ -23,6 +24,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", path: "/", icon: <DashboardIcon /> },
+  { label: "Notes", path: "/notes", icon: <NoteIcon /> },
   { label: "Users", path: "/users", icon: <PeopleIcon /> },
   { label: "Settings", path: "/settings", icon: <SettingsIcon /> },
 ];

@@ -1,0 +1,45 @@
+---
+description: Core frontend architecture and directory structure conventions
+alwaysApply: true
+---
+
+# Frontend Architecture
+
+This is a React + TypeScript SPA (Vite) with MUI, TanStack Query, and Axios.
+
+## Directory Structure
+
+```
+frontend/src/
+  app/              # App-level wiring only (providers, router, auth context)
+  config/           # Static config (theme.ts, queryClient.ts, constants.ts)
+  lib/              # Framework-agnostic utilities (api/axios.ts, api/types.ts)
+  hooks/            # Global shared hooks (useAuth, useNotification, useThemeMode, useSidebar)
+  types/            # Global shared types (models.ts, api.ts, index.ts barrel)
+  layouts/          # Layout shells (DashboardLayout, AuthLayout, layouts/components/)
+  features/         # Feature modules -- one folder per domain
+  components/       # Shared cross-feature UI components
+```
+
+## Import Rules
+
+- Always use `@/` path alias (maps to `src/`). Never use relative `../../` chains.
+- Barrel re-exports (`index.ts`) are only allowed in `types/`. Features must NOT have barrel files.
+- Import order: react/react-dom -> third-party -> @/ aliases -> relative.
+
+## Provider Hierarchy (do not reorder)
+
+ThemeModeProvider > QueryClientProvider > BrowserRouter > AuthProvider > SidebarProvider > NotificationProvider
+
+## State Management
+
+- **Context API** for UI state: auth, theme mode, sidebar, notifications.
+- **TanStack Query** for all server/async state. No manual `useEffect` + `useState` for data fetching.
+- **No Redux** unless a genuinely cross-cutting complex client state emerges that Context cannot handle cleanly.
+
+## TypeScript
+
+- Strict mode. Zero `any`. No `@ts-ignore`.
+- Shared domain models live in `types/models.ts`. API shapes in `types/api.ts`.
+- Feature-scoped types live in `features/<name>/interfaces/<name>.interfaces.ts`.
+- Component props interfaces are defined in the feature's `interfaces/` file, not inline.

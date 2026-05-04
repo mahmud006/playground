@@ -11,10 +11,11 @@ const MOCK_STATS: DashboardStat[] = [
 async function fetchDashboardStats(): Promise<DashboardStat[]> {
   await new Promise((r) => setTimeout(r, 600));
   return MOCK_STATS;
-  // Real API: return (await api.get<DashboardStat[]>("/dashboard/stats")).data;
 }
 
 export const useDashboardStats = () =>
-  useDataQuery<DashboardStat[]>(["dashboard", "stats"], fetchDashboardStats, {
+  useDataQuery<DashboardStat[]>({
+    url: "/dashboard/stats",
+    queryFn: fetchDashboardStats,
     staleTime: 60_000,
   });

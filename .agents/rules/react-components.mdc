@@ -1,0 +1,37 @@
+---
+description: React component and hook conventions for this project
+globs: frontend/src/**/*.tsx
+alwaysApply: false
+---
+
+# React Component Conventions
+
+## Components
+
+- Functional components only. Named exports (no default exports except `App.tsx`).
+- Props interface defined in the feature's `interfaces/` file, not inline.
+- No inline component definitions inside other components.
+- Use MUI components for all UI. No raw HTML + ad-hoc CSS for things MUI provides.
+- Styling via MUI `sx` prop or `styled()`. No CSS modules, no CSS-in-JS libraries.
+- Conditional rendering: use ternary, not `&&`.
+
+## Hooks
+
+- Global hooks (`src/hooks/`): context consumers only (useAuth, useNotification, useThemeMode, useSidebar).
+- Feature query hooks (`features/<name>/services/`): TanStack Query hooks.
+- Custom hooks must start with `use` and live in the appropriate location above.
+
+## Performance
+
+- Push state down. Keep components small and focused.
+- Use `useCallback` / `useMemo` only when preventing expensive re-renders (not by default).
+- Derived state: compute during render, never in `useEffect`.
+- Loading states: use TanStack Query's `isLoading` / `isPending`, not manual `useState`.
+
+## Layouts and Routing
+
+- Route-level pages go in `features/<name>/pages/`.
+- Layouts use `<Outlet />` from react-router-dom.
+- Protected routes wrap with `<RequireAuth>` from `app/router/guards.tsx`.
+- Public auth routes wrap with `<RedirectAuthedHome>`.
+- New routes are added to `app/router/routes.tsx` under the appropriate layout.

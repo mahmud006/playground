@@ -1,0 +1,74 @@
+---
+description: API layer, Axios interceptors, and TanStack Query service patterns
+globs: frontend/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# API & Service Patterns
+
+## Axios Instance (`lib/api/axios.ts`)
+
+- Base URL: `/api/v1` (from `config/constants.ts`).
+- `withCredentials: true` for httpOnly refresh cookies.
+- Request interceptor injects `Bearer <token>` from auth state.
+- Response interceptor catches 401, refreshes token, retries once.
+- All API calls go through this instance. Never use raw `fetch()`.
+
+## Standard Response Envelope (`types/api.ts`)
+
+Backend responses follow `ServiceResponse<T>`:
+```typescript
+{ data: T, success: boolean, message: string }
+```
+Paginated endpoints return `PaginatedResponse<T>` wrapping `PaginatedData<T>`.
+
+## Query / Mutation Wrapper Hooks (`lib/api/`)
+
+ALWAYS use `useDataQuery` and `useDataMutation` from `@/lib/api/`. Never call `useQuery` / `useMutation` directly in services.
+
+### `useDataQuery<T>(queryKey, fnOrUrl, options?)`
+
+- `fnOrUrl` can be a GET endpoint string (`"/users"`) or an async function returning `T`.
+- String shorthand auto-calls `api.get<T>(url)`.
+- Typed error is always `AppAxiosError`.
+
+### `useDataMutation<TData, TVariables>(mutationFn, options?)`
+
+- `invalidateKeys` -- query keys to invalidate on success.
+- `successMessage` / `errorMessage` -- auto-toasts via NotificationProvider. Pass `false` to suppress.
+- Error message auto-extracted from `AppAxiosError` response body.
+
+## Service File Pattern
+
+```typescript
+// features/<name>/services/<name>Service.ts
+import { useDataQuery } from "@/lib/api/useDataQuery.ts";
+import { useDataMutation } from "@/lib/api/useDataMutation.ts";
+import api from "@/lib/api/axios.ts";
+import type { Item, CreateItemPayload } from "../interfaces/<name>.interfaces.ts";
+
+// Raw API functions (pure, no hooks)
+async function fetchItems(): Promise<Item[]> {
+  return (await api.get<Item[]>("/items")).data;
+}
+async function createItem(payload: CreateItemPayload): Promise<Item> {
+  return (await api.post<Item>("/items", payload)).data;
+}
+
+// Hook exports (what pages/components consume)
+export const useItems = () =>
+  useDataQuery<Item[]>(["items"], fetchItems, { staleTime: 60_000 });
+
+export const useCreateItem = () =>
+  useDataMutation<Item, CreateItemPayload>(createItem, {
+    invalidateKeys: [["items"]],
+    successMessage: "Item created",
+  });
+```
+
+## Rules
+
+- Query keys: `["feature", "resource", ...params]` hierarchy.
+- Error extraction: use `extractErrorMessage()` from `@/lib/api/types.ts`.
+- Type every response generically: `api.get<MyType>(url)`.
+- Never put TanStack Query hooks in `hooks/`. Global hooks are only for context consumers. Query hooks belong in the feature's `services/`.

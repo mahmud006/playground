@@ -1,16 +1,14 @@
-import api from "@/lib/api/axios.ts";
+import { RequestType } from "@/lib/api/useDataQuery.ts";
 import { useDataMutation } from "@/lib/api/useDataMutation.ts";
 
 interface UpdateProfilePayload {
   email?: string;
 }
 
-async function updateProfile(payload: UpdateProfilePayload): Promise<void> {
-  await api.patch("/profile", payload);
-}
-
 export const useUpdateProfile = () =>
-  useDataMutation<void, UpdateProfilePayload>(updateProfile, {
+  useDataMutation<void, UpdateProfilePayload>({
+    url: "/profile",
+    requestType: RequestType.PATCH,
     invalidateKeys: [["profile"]],
     successMessage: "Profile updated",
   });

@@ -8,6 +8,7 @@ import { DashboardPage } from "@/features/dashboard/pages/DashboardPage.tsx";
 import { UsersPage } from "@/features/users/pages/UsersPage.tsx";
 import { AddUserPage } from "@/features/users/pages/AddUserPage.tsx";
 import { SettingsPage } from "@/features/settings/pages/SettingsPage.tsx";
+import { NotesPage } from "@/features/notes/pages/NotesPage.tsx";
 import { LoginPage } from "@/features/auth/pages/LoginPage.tsx";
 import { SignupPage } from "@/features/auth/pages/SignupPage.tsx";
 
@@ -22,6 +23,7 @@ export const routes: RouteObject[] = [
       { index: true, element: <DashboardPage /> },
       { path: "users", element: <UsersPage /> },
       { path: "users/new", element: <AddUserPage /> },
+      { path: "notes", element: <NotesPage /> },
       { path: "settings", element: <SettingsPage /> },
     ],
   },

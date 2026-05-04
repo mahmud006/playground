@@ -13,6 +13,7 @@ model User {
   passwordHash String
   createdAt    DateTime       @default(now())
   refreshTokens RefreshToken[]
+  notes        Note[]
 }
 
 model RefreshToken {
@@ -29,5 +30,18 @@ model RefreshToken {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String?
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 

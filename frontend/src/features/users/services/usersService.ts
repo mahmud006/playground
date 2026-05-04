@@ -1,4 +1,3 @@
-import api from "@/lib/api/axios.ts";
 import { useDataQuery } from "@/lib/api/useDataQuery.ts";
 import { useDataMutation } from "@/lib/api/useDataMutation.ts";
 
@@ -8,25 +7,17 @@ import type {
   UsersListResponse,
 } from "../interfaces/users.interfaces.ts";
 
-async function fetchUsers(page: number, pageSize: number): Promise<UsersListResponse> {
-  const res = await api.get<UsersListResponse>("/users", { params: { page, pageSize } });
-  return res.data;
-}
-
 export const useUsers = (page: number, pageSize: number) =>
-  useDataQuery<UsersListResponse>(
-    ["users", "list", page, pageSize],
-    () => fetchUsers(page, pageSize),
-    { staleTime: 60_000 }
-  );
-
-async function createUser(payload: CreateUserRequest): Promise<UserListItem> {
-  const res = await api.post<UserListItem>("/users", payload);
-  return res.data;
-}
+  useDataQuery<UsersListResponse>({
+    url: "/users",
+    params: { page, pageSize },
+    queryKey: ["users", "list", page, pageSize],
+    staleTime: 60_000,
+  });
 
 export const useCreateUser = () =>
-  useDataMutation<UserListItem, CreateUserRequest>(createUser, {
+  useDataMutation<UserListItem, CreateUserRequest>({
+    url: "/users",
     invalidateKeys: [["users", "list"]],
     successMessage: "User created",
   });
