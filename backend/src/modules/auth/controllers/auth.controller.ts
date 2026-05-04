@@ -1,11 +1,11 @@
 import type { Request, Response } from "express";
 
-import { REFRESH_COOKIE_NAME } from "../utils/cookies.js";
-import * as authService from "../services/auth.service.js";
-import { CredentialsSchema } from "../utils/credentialsSchema.js";
-import { clearRefreshCookie, setRefreshCookie } from "../utils/httpCookies.js";
-import { respondAuthError } from "../utils/respondAuthError.js";
-import { userRepository } from "../repositories/user.repository.js";
+import { REFRESH_COOKIE_NAME } from "@/modules/auth/utils/cookies.js";
+import * as authService from "@/modules/auth/services/auth.service.js";
+import { CredentialsSchema } from "@/modules/auth/utils/credentialsSchema.js";
+import { clearRefreshCookie, setRefreshCookie } from "@/modules/auth/utils/httpCookies.js";
+import { respondAuthError } from "@/modules/auth/utils/respondAuthError.js";
+import { userRepository } from "@/modules/auth/repositories/user.repository.js";
 
 const signup = async (req: Request, res: Response): Promise<void> => {
   const parsed = CredentialsSchema.safeParse(req.body);

@@ -1,6 +1,6 @@
 import type { Response } from "express";
 
-import { REFRESH_COOKIE_NAME, refreshCookieOptions } from "./cookies.js";
+import { REFRESH_COOKIE_NAME, refreshCookieOptions } from "@/modules/auth/utils/cookies.js";
 
 export function setRefreshCookie(res: Response, token: string): void {
   res.cookie(REFRESH_COOKIE_NAME, token, refreshCookieOptions());

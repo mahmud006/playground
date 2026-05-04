@@ -74,9 +74,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const skipRefresh = location.pathname === "/login" || location.pathname === "/signup";
 
-    (async () => {
-      const token = skipRefresh ? null : await refreshAccessToken();
-      await loadMe(token);
+    void (async () => {
+      try {
+        const token = skipRefresh ? null : await refreshAccessToken();
+        await loadMe(token);
+      } catch {
+        setUser(null);
+        setAccessToken(null);
+        setStatus("anonymous");
+      }
     })();
   }, [location.pathname, loadMe, refreshAccessToken]);
 

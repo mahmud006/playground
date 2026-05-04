@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 
-import * as notesService from "../services/notes.service.js";
-import type { CreateNoteResponse, NotesErrorBody, NotesListResponse } from "../types/notes.types.js";
-import { CreateNoteSchema } from "../utils/notesSchemas.js";
+import * as notesService from "@/modules/notes/services/notes.service.js";
+import type { CreateNoteResponse, NotesErrorBody, NotesListResponse } from "@/modules/notes/types/notes.types.js";
+import { CreateNoteSchema } from "@/modules/notes/utils/notesSchemas.js";
 
 function requireUserId(req: Request, res: Response): string | null {
   const userId = req.auth?.userId;

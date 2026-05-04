@@ -14,6 +14,7 @@ import { SignupPage } from "@/features/auth/pages/SignupPage.tsx";
 
 export const routes: RouteObject[] = [
   {
+    path: "/",
     element: (
       <RequireAuth>
         <DashboardLayout />
@@ -28,14 +29,21 @@ export const routes: RouteObject[] = [
     ],
   },
   {
+    path: "login",
     element: (
       <RedirectAuthedHome>
         <AuthLayout />
       </RedirectAuthedHome>
     ),
-    children: [
-      { path: "login", element: <LoginPage /> },
-      { path: "signup", element: <SignupPage /> },
-    ],
+    children: [{ index: true, element: <LoginPage /> }],
+  },
+  {
+    path: "signup",
+    element: (
+      <RedirectAuthedHome>
+        <AuthLayout />
+      </RedirectAuthedHome>
+    ),
+    children: [{ index: true, element: <SignupPage /> }],
   },
 ];

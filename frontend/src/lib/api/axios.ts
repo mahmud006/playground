@@ -39,10 +39,14 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
+    const isRefreshCall =
+      typeof original?.url === "string" && original.url.includes("/auth/refresh");
+
     if (
       error.response?.status === 401 &&
       !original._retry &&
-      refreshFn
+      refreshFn &&
+      !isRefreshCall
     ) {
       original._retry = true;
 

@@ -1,5 +1,5 @@
-import { prisma } from "../../../db/prisma.js";
-import type { CreateNoteInput } from "../utils/notesSchemas.js";
+import { prisma } from "@/db/prisma.js";
+import type { CreateNoteInput } from "@/modules/notes/utils/notesSchemas.js";
 
 export const notesRepository = {
   listForUser(userId: string) {

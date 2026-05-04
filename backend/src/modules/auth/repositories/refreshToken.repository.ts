@@ -1,10 +1,10 @@
-import { prisma } from "../../../db/prisma.js";
+import { prisma } from "@/db/prisma.js";
 import {
   createRefreshToken,
   hashRefreshToken,
   parseRefreshToken,
   type RefreshToken,
-} from "../utils/jwt.js";
+} from "@/modules/auth/utils/jwt.js";
 
 export async function persistRefreshToken(params: {
   userId: string;

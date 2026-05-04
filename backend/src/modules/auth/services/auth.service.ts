@@ -1,12 +1,12 @@
-import { hashPassword, verifyPassword } from "../utils/crypto.js";
-import { createRefreshToken, signAccessToken, type RefreshToken } from "../utils/jwt.js";
+import { hashPassword, verifyPassword } from "@/modules/auth/utils/crypto.js";
+import { createRefreshToken, signAccessToken, type RefreshToken } from "@/modules/auth/utils/jwt.js";
 import {
   persistRefreshToken,
   revokeRefreshToken,
   rotateRefreshToken,
-} from "../repositories/refreshToken.repository.js";
-import { userRepository } from "../repositories/user.repository.js";
-import { AuthServiceError } from "../utils/authErrors.js";
+} from "@/modules/auth/repositories/refreshToken.repository.js";
+import { userRepository } from "@/modules/auth/repositories/user.repository.js";
+import { AuthServiceError } from "@/modules/auth/utils/authErrors.js";
 
 export type AuthSession = {
   accessToken: string;

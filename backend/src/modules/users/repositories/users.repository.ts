@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
-import type { CreateUserInput, ListUsersQuery } from "../utils/usersSchemas.js";
-import { UsersServiceError } from "../utils/usersErrors.js";
+import type { CreateUserInput, ListUsersQuery } from "@/modules/users/utils/usersSchemas.js";
+import { UsersServiceError } from "@/modules/users/utils/usersErrors.js";
 
 export type TeamUser = {
   id: string;

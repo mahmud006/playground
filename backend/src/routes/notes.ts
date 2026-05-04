@@ -1,6 +1,6 @@
 import express from "express";
-import { requireAuth } from "../modules/auth/middleware/requireAuth.js";
-import { list, create, remove } from "../modules/notes/controllers/notes.controller.js";
+import { requireAuth } from "@/modules/auth/middleware/requireAuth.js";
+import { list, create, remove } from "@/modules/notes/controllers/notes.controller.js";
 
 const notesRouter = express.Router();
 

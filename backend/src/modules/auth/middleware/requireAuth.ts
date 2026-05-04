@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { verifyAccessToken } from "../utils/jwt.js";
+import { verifyAccessToken } from "@/modules/auth/utils/jwt.js";
 
 function extractBearerToken(req: Request): string | null {
   const header = req.header("authorization");

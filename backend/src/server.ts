@@ -1,12 +1,12 @@
 import express, { type Request, type Response } from "express";
 import cookieParser from "cookie-parser";
 
-import { API_V1_PREFIX } from "./constants/api.js";
-import { env } from "./env.js";
-import authRouter from "./routes/authRoutes.js";
-import { meRouter } from "./routes/me.js";
-import usersRouter from "./routes/users.js";
-import notesRouter from "./routes/notes.js";
+import { API_V1_PREFIX } from "@/constants/api.js";
+import { env } from "@/env.js";
+import authRouter from "@/routes/authRoutes.js";
+import { meRouter } from "@/routes/me.js";
+import usersRouter from "@/routes/users.js";
+import notesRouter from "@/routes/notes.js";
 
 const app = express();
 const PORT = env.PORT;

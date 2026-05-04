@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 
-import { CreateUserSchema, ListUsersQuerySchema } from "../utils/usersSchemas.js";
-import { respondUsersError } from "../utils/respondUsersError.js";
-import * as usersService from "../services/users.service.js";
+import { CreateUserSchema, ListUsersQuerySchema } from "@/modules/users/utils/usersSchemas.js";
+import { respondUsersError } from "@/modules/users/utils/respondUsersError.js";
+import * as usersService from "@/modules/users/services/users.service.js";
 
 const listUsers = async (req: Request, res: Response): Promise<void> => {
   const parsed = ListUsersQuerySchema.safeParse(req.query);

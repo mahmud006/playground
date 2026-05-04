@@ -1,6 +1,6 @@
 import type { Response } from "express";
 
-import { UsersServiceError } from "./usersErrors.js";
+import { UsersServiceError } from "@/modules/users/utils/usersErrors.js";
 
 export function respondUsersError(res: Response, err: unknown): void {
   if (err instanceof UsersServiceError) {

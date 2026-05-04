@@ -1,7 +1,7 @@
-import { notesRepository } from "../repositories/notes.repository.js";
-import type { CreateNoteResponse, NotesListResponse } from "../types/notes.types.js";
-import { toNoteResource } from "../utils/noteMapper.js";
-import type { CreateNoteInput } from "../utils/notesSchemas.js";
+import { notesRepository } from "@/modules/notes/repositories/notes.repository.js";
+import type { CreateNoteResponse, NotesListResponse } from "@/modules/notes/types/notes.types.js";
+import { toNoteResource } from "@/modules/notes/utils/noteMapper.js";
+import type { CreateNoteInput } from "@/modules/notes/utils/notesSchemas.js";
 
 export async function getNotes(userId: string): Promise<NotesListResponse> {
   const rows = await notesRepository.listForUser(userId);

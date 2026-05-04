@@ -1,6 +1,6 @@
 import type { Note } from "@prisma/client";
 
-import type { NoteResource } from "../types/notes.types.js";
+import type { NoteResource } from "@/modules/notes/types/notes.types.js";
 
 export function toNoteResource(row: Note): NoteResource {
   return {

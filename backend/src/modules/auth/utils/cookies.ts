@@ -1,7 +1,7 @@
 import type { CookieOptions } from "express";
 
-import { AUTH_COOKIE_PATH } from "../../../constants/api.js";
-import { env } from "../../../env.js";
+import { AUTH_COOKIE_PATH } from "@/constants/api.js";
+import { env } from "@/env.js";
 
 export const REFRESH_COOKIE_NAME = "refresh_token";
 

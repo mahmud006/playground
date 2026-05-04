@@ -1,6 +1,6 @@
 import type { Response } from "express";
 
-import { AuthServiceError } from "./authErrors.js";
+import { AuthServiceError } from "@/modules/auth/utils/authErrors.js";
 
 /** Maps `AuthServiceError` to JSON; rethrows anything else. */
 export function respondAuthError(res: Response, err: unknown): void {
